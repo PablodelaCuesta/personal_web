@@ -8,7 +8,7 @@ nginx-proxy:
     - /
 
 www:
-  image: nginx:1.22-alpine
+  image: nginx:1.21-alpine
   restart: always
   expose: 
     - "80"
