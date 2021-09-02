@@ -1,4 +1,11 @@
-version: "3.9"
+version: "3"
+
+volumes: 
+  certs:
+  vhost:
+  html:
+  acme:
+
 services:
   nginx-proxy:
     image: nginxproxy/nginx-proxy
@@ -11,6 +18,8 @@ services:
       - certs:/etc/nginx/certs
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
 
 
   www:
@@ -36,15 +45,8 @@ services:
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - acme:/etc/acme.sh
-      - certs
-      - vhost
-      - html
-
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
     environment: 
       - DEFAULT_EMAIL=pablodelacuesta@outlook.es
-
-volumes: 
-  certs:
-  vhost:
-  html:
-  acme:
