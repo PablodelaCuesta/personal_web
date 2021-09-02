@@ -1,0 +1,9 @@
+name: Send my html to digital ocean droplet
+on: push
+jobs:
+  build:
+    name: Hello world action
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    
