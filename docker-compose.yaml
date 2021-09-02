@@ -1,34 +1,50 @@
-nginx-proxy:
-  image: nginxproxy/nginx-proxy
-  restart: always
-  ports:
-    - "80:80"
-    - "443:443"
-  volumes:
-    - /var/run/docker.sock:/tmp/docker.sock:ro
-    - certs:/etc/nginx/certs
-    - vhost:/etc/nginx/vhost.d
-    - html:/usr/share/nginx/html
+version: "3.9"
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
 
 
-www:
-  image: nginx:1.21-alpine
-  restart: always
-  expose: 
-    - "80"
-  volumes: 
-    - /data/www/:/usr/share/nginx/html/
-  environment: 
-    - VIRTUAL_HOST=pablodelacuesta.es, www.pablodelacuesta.es
-    - LETSENCRYPT_HOST=pablodelacuesta.es
+  www:
+    build:
+      context: .
+      dockerfile: .
+    restart: always
+    expose: 
+      - "80"
+    environment: 
+      - VIRTUAL_HOST=pablodelacuesta.es, www.pablodelacuesta.es
+      - LETSENCRYPT_HOST=pablodelacuesta.es
 
-letsencrypt:
-  image: nginxproxy/acme-companion
-  restart: always
-  volumes: 
-    - /var/run/docker.sock:/var/run/docker.sock:ro
-    - acme:/etc/acme.sh
-  volumes_from: 
-    - nginx-proxy
-  environment: 
-    - DEFAULT_EMAIL=pablodelacuesta@outlook.es
+  api:
+    image: nginx:1.21-alpine
+    restart: always
+    expose: 
+      - "80"
+    environment: 
+      - VIRTUAL_HOST=api.pablodelacuesta.es
+
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    restart: always
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
+    volumes_from: 
+      - nginx-proxy
+    environment: 
+      - DEFAULT_EMAIL=pablodelacuesta@outlook.es
+
+volumes: 
+  certs:
+  vhost:
+  html:
+  acme:
