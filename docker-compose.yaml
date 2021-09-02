@@ -14,9 +14,7 @@ services:
 
 
   www:
-    build:
-      context: .
-      dockerfile: .
+    build: .
     restart: always
     expose: 
       - "80"
@@ -38,8 +36,10 @@ services:
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - acme:/etc/acme.sh
-    volumes_from: 
-      - nginx-proxy
+      - certs
+      - vhost
+      - html
+
     environment: 
       - DEFAULT_EMAIL=pablodelacuesta@outlook.es
 
