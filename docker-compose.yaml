@@ -23,10 +23,12 @@ services:
 
 
   www:
-    build: .
+    image: nginx:1.21-alpine
     restart: always
     expose: 
       - "80"
+    volumes:
+      - ./www:/usr/share/nginx/html
     environment: 
       - VIRTUAL_HOST=pablodelacuesta.es, www.pablodelacuesta.es
       - LETSENCRYPT_HOST=pablodelacuesta.es
