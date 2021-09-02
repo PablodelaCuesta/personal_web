@@ -6,3 +6,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
+    - name: Run docker-compose to restart
+      uses: sudo-bot/action-docker-compose@latest
+      with:
+        cli-args: "restart"
